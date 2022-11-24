@@ -1,5 +1,6 @@
 import { Button, Checkbox, Form,  Radio, Input } from 'antd';
 import React from 'react';
+import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 
 function App() {
   const onFinish = (values) => {
@@ -24,12 +25,22 @@ function App() {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Form.Item style={{paddingTop:100, paddingLeft:50}} label="구분" >
+      <Form.Item style={{paddingTop:100, paddingLeft:50}} 
+        label="구분" 
+        name="category"
+        rules={[
+          {
+            required: true,
+            message: '구분을 체크해주세요.',
+          },
+        ]}
+      >
           <Radio.Group>
             <Radio value="user"> 고객 </Radio>
             <Radio value="store"> 가게 </Radio>
             <Radio value="rider"> 라이더 </Radio>
           </Radio.Group>
+      
       </Form.Item>
 
       <Form.Item style={{width:1000, paddingTop:10, marginLeft:200}}
@@ -51,7 +62,7 @@ function App() {
         rules={[
           {
             required: true,
-            message: '비밀번호를 입력하세요',
+            message: '비밀번호를 입력하세요.',
           },
         ]}
       >
@@ -79,6 +90,15 @@ function App() {
           로그인
         </Button>
       </Form.Item>
+
+      <a href={NAVER_AUTH_URL}>
+        <img style={{width:150, marginLeft:900}} alt="naver" src="img/naver.png"></img>  
+      </a>
+
+      <a href={KAKAO_AUTH_URL}>
+        <img style={{width:150, marginLeft:20}} alt="kakao" src="img/kakao.png"></img>  
+      </a>
+
     </Form>
   );
 };
