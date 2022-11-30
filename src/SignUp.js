@@ -1,7 +1,7 @@
 import { Form, Select, Input, Button } from 'antd';
 import React from 'react';
 
-const SignUp = () => {
+const SignUp = ({offSignUp}) => {
     const { Option } = Select;
 
     const tailFormItemLayout = {
@@ -17,13 +17,19 @@ const SignUp = () => {
             },
     };
 
-    const finishSignUp = () => {    //db user 테이블에 저장
-        console.log('회원가입이 완료되었습니다.')
+    const finishSignUp = () => {    //가입하기 버튼 누르면 db user 테이블에 저장
+        console.log('회원가입이 완료되었습니다.');
+
+    }
+
+    const clickCancel = () => {     //취소 버튼 누르면 처음 화면으로 돌아가기
+        offSignUp();
     }
     
     return (
+        
         <Form>
-            <Form.Item style={{width:1000, paddingTop:10, marginLeft:200}}
+            <Form.Item style={{width:1000, paddingTop:10, marginLeft:200, marginTop:200}}
                 name="id"
                 label="아이디"
                 rules={[
@@ -140,14 +146,17 @@ const SignUp = () => {
                 </Input.Group>
             </Form.Item>
 
-            <Form.Item {...tailFormItemLayout} style={{marginLeft:500, width:120}}>
-                <Button type="primary" htmlType="submit" onClick={finishSignUp}>
+            <Form.Item {...tailFormItemLayout}>
+                <Button htmlType="cancel" style={{marginLeft:10, width:120, marginTop:50}} onClick={clickCancel}>
+                    취소
+                </Button>
+                <Button type="primary" htmlType="submit" style={{marginLeft:30, width:120, marginTop:50}} onClick={finishSignUp}>
                     가입하기
                 </Button>
             </Form.Item>
 
                 </Form>
-    )
+    );
 }
 
 

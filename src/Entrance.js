@@ -1,11 +1,18 @@
 import { Button, Checkbox, Form,  Radio, Input } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 
-const Entrance = ({onSignUp, offSignUp})  => {
+const Entrance = ({onSignUp})  => {
+  const [form] = Form.useForm();
 
-  const clickSignUp = () => {
+  const clickSignUp = () => {   //회원가입 버튼 누르면 회원가입 창으로 이동
     onSignUp();
+  }
+
+  const onClick = () => {   //로그인 버튼 누르면 db에 id,pw있는지 확인
+    let userinform = form.getFieldsValue();
+    
   }
 
   // const onFinish = (values) => {
@@ -66,7 +73,7 @@ const Entrance = ({onSignUp, offSignUp})  => {
           },
         ]}
       >
-        <Input />
+        <Input prefix={<UserOutlined className="site-form-item-icon" />}/>
       </Form.Item>
 
       <Form.Item style={{width:1000, marginLeft:200}}
@@ -79,7 +86,7 @@ const Entrance = ({onSignUp, offSignUp})  => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}/>
       </Form.Item>
 
       <Form.Item style={{marginLeft:20}}
@@ -94,10 +101,10 @@ const Entrance = ({onSignUp, offSignUp})  => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button htmlType="signup" style={{width:120}} onClick={clickSignUp}>
+        <Button htmlType="signup" style={{width:120}} onClick="window.open('http://localhost:3000/SignUp')">
           회원가입
         </Button>
-        <Button type="primary" htmlType="signin" style={{marginLeft:30, width:120}}>
+        <Button type="primary" htmlType="signin" style={{marginLeft:30, width:120}} onClick={onClick}>
           로그인
         </Button>
       </Form.Item>
@@ -107,7 +114,7 @@ const Entrance = ({onSignUp, offSignUp})  => {
       </a>
 
       <a href={KAKAO_AUTH_URL}>
-        <img style={{width:158, marginLeft:20}} alt="kakao" src="img/kakao.png"></img>  
+        <img style={{width:158, marginLeft:20, marginTop:20}} alt="kakao" src="img/kakao.png"></img>  
       </a>
 
 
