@@ -1,7 +1,9 @@
 import { Form, Select, Input, Button } from 'antd';
 import React from 'react';
+import axios from 'axios';
 
 const SignUp = ({offSignUp}) => {
+    const [form] = Form.useForm();
     const { Option } = Select;
 
     const tailFormItemLayout = {
@@ -17,9 +19,32 @@ const SignUp = ({offSignUp}) => {
             },
     };
 
-    const finishSignUp = () => {    //가입하기 버튼 누르면 db user 테이블에 저장
-        console.log('회원가입이 완료되었습니다.');
+    const userTemplete = {
+        "id": "",
+        "pw": "",
+        "name": "", 
+        "phone": "",
+        "address": []
+    }
 
+    const finishSignUp = () => {    //가입하기 버튼 누르면 db user 테이블에 저장
+        let userSign = form.getFieldsValue();
+        userTemplete.id = userSign.id;
+        userTemplete.pw = userSign.password;
+        userTemplete.name = userSign.name;
+        userTemplete.phone = userSign.phone;
+        userTemplete.address = userSign.city + userSign.street;
+        console.log(userTemplete);
+
+        axios.post("http://localhost:8080/signup",
+            userTemplete
+        )
+        .then((response) => {
+            console.log(response.data); 
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
     }
 
     const clickCancel = () => {     //취소 버튼 누르면 처음 화면으로 돌아가기
@@ -27,8 +52,21 @@ const SignUp = ({offSignUp}) => {
     }
     
     return (
-        
-        <Form>
+        <Form
+            form={form}
+            style={{paddingRight:30, marginTop:300, marginRight:500}}
+            name="basic"
+            labelCol={{
+                span: 8,
+            }}
+            wrapperCol={{
+                span: 16,
+            }}
+            initialValues={{
+                remember: false,
+            }}
+            autoComplete="off"
+        >
             <Form.Item style={{width:1000, paddingTop:10, marginLeft:200, marginTop:200}}
                 name="id"
                 label="아이디"
@@ -112,11 +150,11 @@ const SignUp = ({offSignUp}) => {
             <Form.Item label="주소" style={{width:1000, paddingTop:10, marginLeft:200}}>
                 <Input.Group compact>
                 <Form.Item
-                    name={['주소', '시']}
+                    name="city"
                     noStyle
-                    rules={[{ required: true, message: '주소를 입력해주세요.' }]}
+                    rules={[{ required: true, message: '시를 입력해주세요.' }]}
                 >
-                    <Select placeholder="시 선택">
+                    <Select placeholder="시 선택" >
                     <Option value="강원">강원</Option>
                     <Option value="경기">경기</Option>
                     <Option value="경남">경남</Option>
@@ -137,9 +175,9 @@ const SignUp = ({offSignUp}) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    name={['address', 'street']}
+                    name="street"
                     noStyle
-                    rules={[{ required: true, message: '시를 입력해주세요.' }]}
+                    rules={[{ required: true, message: '도로명 주소를 입력해주세요.' }]}
                 >
                     <Input style={{ width: '50%' }} placeholder="도로명주소" />
                 </Form.Item>

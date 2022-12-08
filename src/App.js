@@ -36,19 +36,22 @@ const App = () => {
         });
     }
     
-    useEffect(()=>{
-        authHandler();
-    });
+    // useEffect(()=>{
+    //     authHandler();
+    // });
 
     return (
         <div>
             {isSignIn ?
                 <Main isSignIn={isSignIn} offSignIn={offSignIn}/> : 
-                <Entrance isSignIn={isSignIn} onSignIn={onSignIn} />}
-            {/* {isSignUp ?
-                <SignUp isSignUp={isSignUp} offSignUp={offSignUp}/> :
-                <Entrance isSignUp={isSignUp} onSignUp={onSignUp}/>} */}
+                <Entrance isSignUp={isSignUp} onSignUp={onSignUp}/>}
+            
+                {isSignUp ?
+                    <SignUp isSignUp={isSignUp} offSignUp={offSignUp}/> :
+                    ''}
+            
         </div>
+
         
     )
 }

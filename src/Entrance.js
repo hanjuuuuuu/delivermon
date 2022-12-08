@@ -3,24 +3,29 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 
-const Entrance = ({onSignUp})  => {
+const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
   const [form] = Form.useForm();
+
+  const userCheck = {
+    "category" : "",
+    "id" : "",
+    "pw" : "",
+    "remember" : ""
+  }
 
   const clickSignUp = () => {   //회원가입 버튼 누르면 회원가입 창으로 이동
     onSignUp();
   }
 
-  const onClick = () => {   //로그인 버튼 누르면 db에 id,pw있는지 확인
+  const onClick = () => {   //로그인 버튼 누르면 db에 id,pw있는지 확인해서 로그인 완료하기
     let userinform = form.getFieldsValue();
+    userCheck.category = userinform.category;
+    userCheck.id = userinform.id;
+    userCheck.pw = userinform.password;
+    userCheck.remember = userinform.remember;
+    console.log(userCheck);
     
   }
-
-  // const onFinish = (values) => {
-  //   console.log('Success:', values);
-  // };
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log('Failed:', errorInfo);
-  // };
 
   const tailLayout = {
     wrapperCol: {
@@ -31,6 +36,7 @@ const Entrance = ({onSignUp})  => {
   
   return (
     <Form
+      form={form}
       name="basic"
       labelCol={{
         span: 8,
@@ -41,8 +47,6 @@ const Entrance = ({onSignUp})  => {
       initialValues={{
         remember: false,
       }}
-      // onFinish={onFinish}
-      // onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Form.Item style={{paddingTop:100, paddingLeft:50}} 
@@ -101,7 +105,7 @@ const Entrance = ({onSignUp})  => {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
-        <Button htmlType="signup" style={{width:120}} onClick="window.open('http://localhost:3000/SignUp')">
+        <Button htmlType="signup" style={{width:120}} onClick={clickSignUp}>
           회원가입
         </Button>
         <Button type="primary" htmlType="signin" style={{marginLeft:30, width:120}} onClick={onClick}>
