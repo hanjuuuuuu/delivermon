@@ -1,4 +1,4 @@
-import { Form, Select, Input, Button } from 'antd';
+import { Form, Select, Input, Button, Radio } from 'antd';
 import React from 'react';
 import axios from 'axios';
 
@@ -24,11 +24,12 @@ const SignUp = ({offSignUp}) => {
         "pw": "",
         "name": "", 
         "phone": "",
-        "address": []
+        "address": ""
     }
 
     const finishSignUp = () => {    //가입하기 버튼 누르면 db user 테이블에 저장
         let userSign = form.getFieldsValue();
+        userTemplete.category = userSign.category;
         userTemplete.id = userSign.id;
         userTemplete.pw = userSign.password;
         userTemplete.name = userSign.name;
@@ -40,6 +41,7 @@ const SignUp = ({offSignUp}) => {
             userTemplete
         )
         .then((response) => {
+            alert('회원가입이 완료되었습니다!')
             console.log(response.data); 
         })
         .catch((error)=>{
@@ -67,7 +69,24 @@ const SignUp = ({offSignUp}) => {
             }}
             autoComplete="off"
         >
-            <Form.Item style={{width:1000, paddingTop:10, marginLeft:200, marginTop:200}}
+            <Form.Item style={{width:1000, paddingTop:10, paddingLeft:300, marginTop:200}}
+                label="구분" 
+                name="category"
+                rules={[
+                {
+                    required: true,
+                    message: '구분을 체크해주세요.',
+                },
+                ]}
+            >
+                <Radio.Group>
+                    <Radio value="user"> 고객 </Radio>
+                    <Radio value="store"> 가게 </Radio>
+                    <Radio value="rider"> 라이더 </Radio>
+                </Radio.Group>
+            
+            </Form.Item>
+            <Form.Item style={{width:1000, paddingTop:10, marginLeft:200}}
                 name="id"
                 label="아이디"
                 rules={[
@@ -193,7 +212,7 @@ const SignUp = ({offSignUp}) => {
                 </Button>
             </Form.Item>
 
-                </Form>
+            </Form>
     );
 }
 

@@ -2,6 +2,7 @@ import { Button, Checkbox, Form,  Radio, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
+import axios from 'axios';
 
 const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
   const [form] = Form.useForm();
@@ -17,14 +18,49 @@ const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
     onSignUp();
   }
 
-  const onClick = () => {   //로그인 버튼 누르면 db에 id,pw있는지 확인해서 로그인 완료하기
+  const onClick = () => {   //로그인 버튼 누르면 db에 id,pw있는지 확인해서 로그인 완료하기, 구분확인해서 알맞은 창으로 넘어가기, 로그인 유지 선택하면 쿠키로 유지하기
     let userinform = form.getFieldsValue();
     userCheck.category = userinform.category;
     userCheck.id = userinform.id;
     userCheck.pw = userinform.password;
     userCheck.remember = userinform.remember;
-    console.log(userCheck);
-    
+    if(userCheck.category === undefined){
+      alert('구분을 체크해주세요!');
+    } else if(userCheck.id === undefined || userCheck.pw === undefined){
+      alert('아이디, 비밀번호를 입력하세요!');
+    } else{
+        console.log('userCheck', userCheck);
+
+        axios.post("http://localhost:8080/login",
+            userCheck
+        )
+        .then((res) => {
+          console.log('res.data',res.data);
+            if(res.data === 'no'){                          //로그인 실패했을 경우
+              alert('아이디 혹은 비밀번호가 틀렸습니다.');
+            }
+            else{    //로그인 성공했을 경우(구분 확인, 로그인 유지 확인)
+
+              if(userCheck.category === 'user'){   //고객으로 로그인 했을 경우 고객 창 띄우기
+                console.log('user');
+              } else if(userCheck.category === 'store'){  //가게로 로그인 했을 경우 가게 창 띄우기
+                console.log('store');
+              } else if(userCheck.category === 'rider'){  //라이더로 로그인 했을 경우 라이더 창 띄우기
+                console.log('rider');
+              }
+
+              if(userCheck.remember){  //로그인 유지 할 경우
+                console.log('로그인 유지');
+              }
+              else{               //로그인 유지 하지 않을 경우
+                console.log('로그인 유지x');
+              }
+            }
+        })
+        .catch((error) => {
+          console.log(error);  
+        })
+      }
   }
 
   const tailLayout = {

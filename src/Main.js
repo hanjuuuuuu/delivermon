@@ -2,14 +2,15 @@ import React from 'react';
 import axios from 'axios';
 
 const Main = (offSignIn) => {
-    const onClick = async () => {
-        try {
-            const res = await axios
-                .post('http://localhost:8080/logout');
+    const onClick = () => {
+        return axios
+        .post('http://localhost:8080/logout')
+        .then((res)=> {
             offSignIn();
-        } catch (err) {
+        })
+        .catch((err)=> {
             console.log(err.response.data);
-        }
+        })
     }
 
     return(
