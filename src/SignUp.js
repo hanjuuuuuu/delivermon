@@ -27,7 +27,7 @@ const SignUp = ({offSignUp}) => {
         "address": ""
     }
 
-    const finishSignUp = () => {    //가입하기 버튼 누르면 db user 테이블에 저장
+    const finishSignUp = () => {    //가입하기 버튼 누르면 구분에 따라서 db user/store/rider 테이블에 저장
         let userSign = form.getFieldsValue();
         userTemplete.category = userSign.category;
         userTemplete.id = userSign.id;
@@ -43,6 +43,7 @@ const SignUp = ({offSignUp}) => {
         .then((response) => {
             alert('회원가입이 완료되었습니다!')
             console.log(response.data); 
+            offSignUp();
         })
         .catch((error)=>{
             console.log(error);
@@ -90,10 +91,6 @@ const SignUp = ({offSignUp}) => {
                 name="id"
                 label="아이디"
                 rules={[
-                    {
-                        type: 'id',
-                        message: '중복된 아이디입니다.',
-                    },
                     {
                     required: true,
                     message: '아이디를 입력해주세요.',

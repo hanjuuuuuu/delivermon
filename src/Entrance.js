@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 import axios from 'axios';
 
-const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
+
+const Entrance = ({onSignUp, onSignIn, gotoPage})  => {
   const [form] = Form.useForm();
 
   const userCheck = {
@@ -13,6 +14,7 @@ const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
     "pw" : "",
     "remember" : ""
   }
+
 
   const clickSignUp = () => {   //회원가입 버튼 누르면 회원가입 창으로 이동
     onSignUp();
@@ -35,18 +37,24 @@ const Entrance = ({onSignUp, isSignUp, offSignUp})  => {
             userCheck
         )
         .then((res) => {
-          console.log('res.data',res.data);
+          console.log('res.data', res.data);
             if(res.data === 'no'){                          //로그인 실패했을 경우
               alert('아이디 혹은 비밀번호가 틀렸습니다.');
             }
-            else{    //로그인 성공했을 경우(구분 확인, 로그인 유지 확인)
+            else{                                   //로그인 성공했을 경우(구분 확인, 로그인 유지 확인)
 
               if(userCheck.category === 'user'){   //고객으로 로그인 했을 경우 고객 창 띄우기
                 console.log('user');
+                onSignIn();
+
+
               } else if(userCheck.category === 'store'){  //가게로 로그인 했을 경우 가게 창 띄우기
                 console.log('store');
+                onSignIn();
+                
               } else if(userCheck.category === 'rider'){  //라이더로 로그인 했을 경우 라이더 창 띄우기
                 console.log('rider');
+                
               }
 
               if(userCheck.remember){  //로그인 유지 할 경우
