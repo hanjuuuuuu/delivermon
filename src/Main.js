@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const Main = (offSignIn) => {
+const Main = ({offSignIn, gotoPage}) => {
     const onClick = () => {
         return axios
         .post('http://localhost:8080/logout')
@@ -16,7 +16,7 @@ const Main = (offSignIn) => {
     return(
         <div>
             <div>
-                <h2>Main Page</h2>
+                <h2>고객 페이지</h2>
             </div>
             <div>
                 <button onClick={onClick} >로그아웃</button>

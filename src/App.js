@@ -3,12 +3,11 @@ import axios from 'axios';
 import Entrance from "./Entrance";
 import SignUp from "./SignUp";
 import Main from './Main';
-import { userinform, userCheck } from "./Entrance";
 
 const App = () => {
     const [isSignIn, setIsSignIn] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
-    let categoryname = Entrance.usercheck;
+    const [categoryname, setCategoryname] = useState("");
 
     const onSignUp = () => {        //회원가입
         setIsSignUp(true);
@@ -18,31 +17,33 @@ const App = () => {
         setIsSignUp(false);
     }
 
-    const onSignIn = () => {        //user 로그인
+    const onSignIn = (categoryname) => {        //user 로그인
         setIsSignIn(true);
+        setCategoryname(categoryname);
     }
 
     const offSignIn = () => {        //로그아웃
         setIsSignIn(false);
     }
 
-    // const authHandler = () =>{  //초기 화면 렌더링 시, 로그인 유지 확인하여 페이지 렌더링
-    //     return axios
-    //     .get("http://localhost:8080/logincheck")
-    //     .then((res)=>{
-    //         console.log(res.data);
-    //         onSignIn();
-    //     })
-    //     .catch((err) => {
-    //         console.log(err.res);
-    //     });
-    // }
+    const signInHandler = () =>{  //초기 화면 렌더링 시, 로그인 유지 확인하여 페이지 렌더링
+        return axios
+        .get("http://localhost:8080/logincheck")
+        .then((res)=>{
+            console.log(res.data);
+            onSignIn();
+        })
+        .catch((err) => {
+            console.log(err.res);
+        });
+    }
     
-    // useEffect(()=>{
-    //     authHandler();
-    // });
+    useEffect(()=>{
+        signInHandler();
+    });
 
-    function GotoPage({category}){
+    function GotoPage({category}){      //구조분해할당으로 로그인 category 불러오기
+        console.log('category', category);
         if(category === 'user'){
             return(
                 <div>
@@ -87,7 +88,6 @@ const App = () => {
                     <GotoPage category={categoryname}/> : 
                     <Entrance onSignIn={onSignIn} onSignUp={onSignUp}/>
             }
-            
         </div>
 
         

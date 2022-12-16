@@ -5,7 +5,7 @@ import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 import axios from 'axios';
 
 
-const Entrance = ({onSignUp, onSignIn, gotoPage})  => {
+const Entrance = ({onSignUp, onSignIn, gotoPage}) => {
   const [form] = Form.useForm();
 
   const userCheck = {
@@ -45,15 +45,16 @@ const Entrance = ({onSignUp, onSignIn, gotoPage})  => {
 
               if(userCheck.category === 'user'){   //고객으로 로그인 했을 경우 고객 창 띄우기
                 console.log('user');
-                onSignIn();
-
+                onSignIn('user');
 
               } else if(userCheck.category === 'store'){  //가게로 로그인 했을 경우 가게 창 띄우기
                 console.log('store');
-                onSignIn();
+                onSignIn('store');
+                
                 
               } else if(userCheck.category === 'rider'){  //라이더로 로그인 했을 경우 라이더 창 띄우기
                 console.log('rider');
+                onSignIn('rider');
                 
               }
 
@@ -165,8 +166,8 @@ const Entrance = ({onSignUp, onSignIn, gotoPage})  => {
         <img style={{width:158, marginLeft:20, marginTop:20}} alt="kakao" src="img/kakao.png"></img>  
       </a>
 
-
     </Form>
+    
   );
 };
 export default Entrance;
