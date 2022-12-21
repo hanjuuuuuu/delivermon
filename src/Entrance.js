@@ -41,7 +41,7 @@ const Entrance = ({onSignUp, onSignIn, gotoPage}) => {
             if(res.data === 'no'){                          //로그인 실패했을 경우
               alert('아이디 혹은 비밀번호가 틀렸습니다.');
             }
-            else{                                   //로그인 성공했을 경우(구분 확인, 로그인 유지 확인)
+            else{                                   //로그인 성공했을 경우(로그인 유지 확인, 구분 확인)
 
               if(userCheck.category === 'user'){   //고객으로 로그인 했을 경우 고객 창 띄우기
                 console.log('user');
@@ -50,16 +50,21 @@ const Entrance = ({onSignUp, onSignIn, gotoPage}) => {
               } else if(userCheck.category === 'store'){  //가게로 로그인 했을 경우 가게 창 띄우기
                 console.log('store');
                 onSignIn('store');
-                
-                
+
               } else if(userCheck.category === 'rider'){  //라이더로 로그인 했을 경우 라이더 창 띄우기
                 console.log('rider');
                 onSignIn('rider');
-                
               }
 
               if(userCheck.remember){  //로그인 유지 할 경우
                 console.log('로그인 유지');
+                return axios.get("http://localhost:8080/logincheck",{
+                        withCredentials: true,
+                    })
+                    .then((res)=>{
+                        //onSignIn();
+                        console.log(res);
+                    })
               }
               else{               //로그인 유지 하지 않을 경우
                 console.log('로그인 유지x');

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const Main = ({offSignIn, gotoPage}) => {
+const Main = ({offSignIn}) => {
     const onClick = () => {
         return axios
         .post('http://localhost:8080/logout')

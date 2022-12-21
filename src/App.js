@@ -3,6 +3,8 @@ import axios from 'axios';
 import Entrance from "./Entrance";
 import SignUp from "./SignUp";
 import Main from './Main';
+import StoreMain from './StoreMain';
+import RiderMain from './RiderMain';
 
 const App = () => {
     const [isSignIn, setIsSignIn] = useState(false);
@@ -42,40 +44,18 @@ const App = () => {
         signInHandler();
     });
 
-    function GotoPage({category}){      //구조분해할당으로 로그인 category 불러오기
-        console.log('category', category);
+    function GotoPage({category}){      //구조분해할당으로 로그인 category 불러와서 해당 category에 맞는 페이지 return
         if(category === 'user'){
             return(
-                <div>
-                    <div>
-                        <h2>고객 페이지</h2>
-                    </div>
-                    <div>
-                        <button  >로그아웃</button>
-                    </div>
-                </div>
+                <Main offSignIn={offSignIn}/>
             )
         } else if(category === 'store'){
             return(
-                <div>
-                    <div>
-                        <h2>가게 페이지</h2>
-                    </div>
-                    <div>
-                        <button >로그아웃</button>
-                    </div>
-                </div>
+                <StoreMain offSignIn={offSignIn} />
             )
         } else if(category === 'rider'){
             return(
-                <div>
-                    <div>
-                        <h2>라이더 페이지</h2>
-                    </div>
-                    <div>
-                        <button >로그아웃</button>
-                    </div>
-                </div>
+                <RiderMain offSignIn={offSignIn} />
             )
         }
     }
