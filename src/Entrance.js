@@ -62,7 +62,6 @@ const Entrance = ({onSignUp, onSignIn, gotoPage}) => {
                         withCredentials: true,
                     })
                     .then((res)=>{
-                        //onSignIn();
                         console.log(res);
                     })
               }
