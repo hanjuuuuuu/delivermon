@@ -1,9 +1,8 @@
 import { Form, InputNumber, Button, Input } from 'antd';
 import axios from 'axios';
-import React from 'react';
-import Entrance from './Entrance';
+import React, {useEffect} from 'react';
 
-const StoreMenu = ({offMenuUpdate}) => {
+const StoreMenu = ({offMenuUpdate, storecode}) => {
     const [form] = Form.useForm();
     const menuTemplete = {
         "storecode": "",
@@ -13,7 +12,7 @@ const StoreMenu = ({offMenuUpdate}) => {
 
     const onClick = () => {         //등록버튼 눌렀을 때 메뉴 테이블에 메뉴명, 가격 insert 
         let storeinform = form.getFieldsValue();
-        menuTemplete.storecode = Entrance.res.data.STORE_CODE;
+        menuTemplete.storecode = storecode;
         menuTemplete.foodname = storeinform.foodname;
         menuTemplete.price = storeinform.price; 
 
@@ -32,6 +31,10 @@ const StoreMenu = ({offMenuUpdate}) => {
     const menuCancel = () => {
         offMenuUpdate();
     }
+
+    useEffect(() => {          
+        console.log("storecode", storecode)
+    }, [])
 
     return(
         <Form 

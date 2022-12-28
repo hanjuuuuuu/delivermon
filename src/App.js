@@ -10,6 +10,7 @@ const App = () => {
     const [isSignIn, setIsSignIn] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [categoryname, setCategoryname] = useState("");
+    const [storecode, setStoreCode] = useState("");
 
     const onSignUp = () => {        //회원가입
         setIsSignUp(true);
@@ -44,14 +45,14 @@ const App = () => {
         signInHandler();
     });
 
-    function GotoPage({category}){      //구조분해할당으로 로그인 category 불러와서 해당 category에 맞는 페이지 return
+    function GotoPage({category, storecode}){      //구조분해할당으로 로그인 category 불러와서 해당 category에 맞는 페이지 return
         if(category === 'user'){
             return(
                 <Main offSignIn={offSignIn}/>
             )
         } else if(category === 'store'){
             return(
-                <StoreMain offSignIn={offSignIn} />
+                <StoreMain offSignIn={offSignIn} storecode={storecode} />
             )
         } else if(category === 'rider'){
             return(
@@ -65,8 +66,8 @@ const App = () => {
             {isSignUp ?
                 <SignUp offSignUp={offSignUp}/> :
                 isSignIn ?
-                    <GotoPage category={categoryname}/> : 
-                    <Entrance onSignIn={onSignIn} onSignUp={onSignUp}/>
+                    <GotoPage category={categoryname} storecode={storecode}/> : 
+                    <Entrance onSignIn={onSignIn} onSignUp={onSignUp} setStoreCode={setStoreCode}/>
             }
         </div>
 
