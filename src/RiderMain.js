@@ -8,7 +8,7 @@ const RiderMain = ({offSignIn}) => {
                 <h2>라이더 페이지</h2>
             </div>
             <div>
-                <button onclick={offSignIn}>로그아웃</button>
+                <button onClick={offSignIn}>로그아웃</button>
             </div>
         </div>
     )

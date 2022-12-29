@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form,  Radio, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 import axios from 'axios';
 

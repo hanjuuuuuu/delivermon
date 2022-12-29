@@ -22,6 +22,7 @@ const StoreMenu = ({offMenuUpdate, storecode}) => {
         .then((response) => {
             alert("메뉴가 등록되었습니다!");
             console.log(response.data);
+            window.location = ''
         })
         .catch((error) => {
             console.log(error);
