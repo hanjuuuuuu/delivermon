@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table } from 'antd';
 import axios from 'axios';
 import StoreMenu from './StoreMenu';
 import OrderDelivery from "./OrderDelivery"

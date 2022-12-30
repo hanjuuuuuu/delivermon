@@ -2,6 +2,7 @@ import { Form, InputNumber, Button, Input } from 'antd';
 import axios from 'axios';
 import React, {useEffect} from 'react';
 
+//가게 메뉴 등록 페이지.
 const StoreMenu = ({offMenuUpdate, storecode}) => {
     const [form] = Form.useForm();
     const menuTemplete = {
@@ -22,7 +23,7 @@ const StoreMenu = ({offMenuUpdate, storecode}) => {
         .then((response) => {
             alert("메뉴가 등록되었습니다!");
             console.log(response.data);
-            window.location = ''
+            // window.location = '/'
         })
         .catch((error) => {
             console.log(error);
