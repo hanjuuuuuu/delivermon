@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table } from 'antd';
+import { Space, Table, Button } from 'antd';
 import axios from 'axios';
 import StoreMenu from './StoreMenu';
 import OrderDelivery from "./OrderDelivery"
@@ -40,6 +40,19 @@ const StoreMain = ({offSignIn, storecode}) => {
         });
     }
 
+    const onMenuChange = () => {            //메뉴 수정 버튼
+        return axios
+        .post("http://localhost:8080/menuupdate")
+        .then((res)=>{
+            console.log(res.data);
+            setMenuInfo(res.data)
+        })
+        .catch((err) => {
+            console.log(err.res);
+        });
+
+    }
+
     useEffect(() => {          
         onMenuPrint();
     }, [])
@@ -59,10 +72,10 @@ const StoreMain = ({offSignIn, storecode}) => {
         {
             title: '옵션',
             key: 'action',
-            render: (_, record) => (
+            render: (text, record, index) => (
                 <Space size="middle">
-                <a>{record.name} 수정</a>
-                <a>삭제</a>
+                    <Button record={record} onClick={onMenuChange} >수정</Button> 
+                    <Button onClick={onMenuChange} >삭제</Button> 
                 </Space>
             ),
         },

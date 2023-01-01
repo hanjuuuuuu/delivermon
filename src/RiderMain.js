@@ -10,6 +10,7 @@ const RiderMain = ({offSignIn}) => {
             <div>
                 <button onClick={offSignIn}>로그아웃</button>
             </div>
+            
         </div>
     )
 }
