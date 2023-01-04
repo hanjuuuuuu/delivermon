@@ -11,6 +11,7 @@ const App = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [categoryname, setCategoryname] = useState("");
     const [storecode, setStoreCode] = useState("");
+    const [storename, setStoreName] = useState("");
 
     const onSignUp = () => {        //회원가입
         setIsSignUp(true);
@@ -52,7 +53,7 @@ const App = () => {
             )
         } else if(category === 'store'){
             return(
-                <StoreMain offSignIn={offSignIn} storecode={storecode} />
+                <StoreMain offSignIn={offSignIn} storecode={storecode} storename={storename}/>
             )
         } else if(category === 'rider'){
             return(
@@ -67,7 +68,7 @@ const App = () => {
                 <SignUp offSignUp={offSignUp}/> :
                 isSignIn ?
                     <GotoPage category={categoryname} storecode={storecode}/> : 
-                    <Entrance onSignIn={onSignIn} onSignUp={onSignUp} setStoreCode={setStoreCode}/>
+                    <Entrance onSignIn={onSignIn} onSignUp={onSignUp} setStoreCode={setStoreCode} setStoreName={setStoreName}/>
             }
         </div>
 

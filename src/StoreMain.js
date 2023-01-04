@@ -7,7 +7,7 @@ import OrderDelivery from "./OrderDelivery"
 
 //가게 메인 페이지. 가게등록하고 가게들 보이게 한다. 가게 클릭하면 메뉴 테이블의 음식명, 가격이 나타나야하고 메뉴등록 버튼 누르면 메뉴를 추가할 수 있게 한다.
 
-const StoreMain = ({offSignIn, storecode}) => {
+const StoreMain = ({offSignIn, storecode, storename}) => {
     const [isMenu, setIsMenu] = useState(false);
     const [isOrder, setIsOrder] = useState(false);
     const [menuInfo, setMenuInfo] = useState([]);
@@ -41,16 +41,34 @@ const StoreMain = ({offSignIn, storecode}) => {
     }
 
     const onMenuChange = () => {            //메뉴 수정 버튼
-        return axios
-        .post("http://localhost:8080/menuupdate")
-        .then((res)=>{
-            console.log(res.data);
-            setMenuInfo(res.data)
-        })
-        .catch((err) => {
-            console.log(err.res);
-        });
 
+        axios.post("http://localhost:8080/menuupdate",
+        
+    )
+    .then((response) => {
+        alert("메뉴가 등록되었습니다!");
+        console.log(response.data);
+        // window.location = '/'
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+
+    }
+
+    const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼
+        console.log(foodcode)
+        axios.post("http://localhost:8080/menudelete",
+            {foodcode: foodcode}
+        )
+        .then((response) => {
+            alert("메뉴가 삭제되었습니다!");
+            console.log(response.data);
+            // window.location = '/'
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     useEffect(() => {          
@@ -75,7 +93,7 @@ const StoreMain = ({offSignIn, storecode}) => {
             render: (text, record, index) => (
                 <Space size="middle">
                     <Button record={record} onClick={onMenuChange} >수정</Button> 
-                    <Button onClick={onMenuChange} >삭제</Button> 
+                    <Button record={record} onClick={() => onMenuDelete(JSON.stringify(record.key))} >삭제</Button> 
                 </Space>
             ),
         },
@@ -89,7 +107,7 @@ const StoreMain = ({offSignIn, storecode}) => {
                 <OrderDelivery offOrderCheck={offOrderCheck}/> :
                     <div>
                         <div>
-                            <h2>가게 페이지</h2>
+                            <h2>{storename} 가게 페이지</h2>
                         </div>
                         <div>
                             <h4> </h4>

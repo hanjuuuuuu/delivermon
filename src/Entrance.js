@@ -5,7 +5,7 @@ import { NAVER_AUTH_URL, KAKAO_AUTH_URL } from './Oauth';
 import axios from 'axios';
 
 
-const Entrance = ({onSignUp, onSignIn, setStoreCode}) => {
+const Entrance = ({onSignUp, onSignIn, setStoreCode, setStoreName}) => {
   const [form] = Form.useForm();
 
   const userCheck = {
@@ -39,6 +39,7 @@ const Entrance = ({onSignUp, onSignIn, setStoreCode}) => {
         .then((res) => {
           console.log('res.data', res.data);
           setStoreCode(res.data.STORE_CODE);
+          setStoreName(res.data.STORE_NAME);
 
             if(res.data === 'no'){                          //로그인 실패했을 경우
               alert('아이디 혹은 비밀번호가 틀렸습니다.');
