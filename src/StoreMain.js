@@ -2,16 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Space, Table, Button } from 'antd';
 import axios from 'axios';
 import StoreMenu from './StoreMenu';
-import OrderDelivery from "./OrderDelivery"
+import OrderDelivery from "./OrderDelivery";
+import useAxios from './Hook/useAxios';
+import Modal from 'react-modal';
+import { formatCountdown } from 'antd/es/statistic/utils';
 
 
 //가게 메인 페이지. 가게등록하고 가게들 보이게 한다. 가게 클릭하면 메뉴 테이블의 음식명, 가격이 나타나야하고 메뉴등록 버튼 누르면 메뉴를 추가할 수 있게 한다.
-
 const StoreMain = ({offSignIn, storecode, storename}) => {
+    /**
+     * 페이지에서 사용하는 상태변수
+     */
     const [isMenu, setIsMenu] = useState(false);
     const [isOrder, setIsOrder] = useState(false);
     const [menuInfo, setMenuInfo] = useState([]);
 
+    /**
+     * 사용자 HOOK
+     */
+    const axiosDeleteMenu = useAxios('http://localhost:8080/menudelete')
+    const axiosInsertMenu = useAxios('http://localhost:8080/menuinsert')
+
+    
+    /**
+     * 화면에서 사용하는 이벤트를 정의
+     */
     const onMenuUpdate = () => {         //메뉴등록버튼 누르면 메뉴 등록 페이지 띄우기 -> memu 테이블에 메뉴 저장
         setIsMenu(true);
     }
@@ -40,36 +55,43 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
         });
     }
 
-    const onMenuChange = () => {            //메뉴 수정 버튼
-
+    const onMenuChange = (foodcode) => {            //메뉴 수정 버튼
+        // return (<Modal isOpen={true}> 메뉴 수정</Modal>)
         axios.post("http://localhost:8080/menuupdate",
-        
-    )
-    .then((response) => {
-        alert("메뉴가 등록되었습니다!");
-        console.log(response.data);
-        // window.location = '/'
-    })
-    .catch((error) => {
-        console.log(error);
-    })
-
-    }
-
-    const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼
-        console.log(foodcode)
-        axios.post("http://localhost:8080/menudelete",
             {foodcode: foodcode}
         )
         .then((response) => {
-            alert("메뉴가 삭제되었습니다!");
+            alert("메뉴가 수정되었습니다!");
             console.log(response.data);
             // window.location = '/'
         })
         .catch((error) => {
             console.log(error);
         })
+
     }
+
+    // const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼
+    //     axios.post("http://localhost:8080/menudelete",
+    //         {foodcode: foodcode}
+    //     )
+    //     .then((response) => {
+    //         alert("메뉴가 삭제되었습니다!");
+    //         console.log(response.data);
+    //         // window.location = '/'
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     })
+    // }
+
+    const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼 HOOK 사용
+        axiosDeleteMenu({foodcode})
+        .then((response)=>{
+            alert("메뉴가 삭제되었습니다!");
+        })
+    }
+
 
     useEffect(() => {          
         onMenuPrint();
