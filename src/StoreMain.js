@@ -20,8 +20,8 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
     /**
      * 사용자 HOOK
      */
-    const axiosDeleteMenu = useAxios('http://localhost:8080/menudelete')
-    const axiosInsertMenu = useAxios('http://localhost:8080/menuinsert')
+    const axiosDeleteMenu = useAxios('/menudelete')
+    //const axiosInsertMenu = useAxios('/menuinsert')
 
     
     /**
@@ -45,10 +45,10 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
 
     const onMenuPrint = () => {         //메뉴 테이블에 있는 메뉴 중 가게와 맞는 메뉴 출력
         return axios
-        .post("http://localhost:8080/callmenu")
+        .post("/callmenu")
         .then((res)=>{
             console.log(res.data);
-            setMenuInfo(res.data)
+            setMenuInfo(res.data);
         })
         .catch((err) => {
             console.log(err.res);
@@ -57,7 +57,7 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
 
     const onMenuChange = (foodcode) => {            //메뉴 수정 버튼
         // return (<Modal isOpen={true}> 메뉴 수정</Modal>)
-        axios.post("http://localhost:8080/menuupdate",
+        axios.post("/menuupdate",
             {foodcode: foodcode}
         )
         .then((response) => {
@@ -72,7 +72,7 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
     }
 
     // const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼
-    //     axios.post("http://localhost:8080/menudelete",
+    //     axios.post("/menudelete",
     //         {foodcode: foodcode}
     //     )
     //     .then((response) => {
@@ -85,11 +85,14 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
     //     })
     // }
 
-    const onMenuDelete = (foodcode) => {        //메뉴 삭제 버튼 HOOK 사용
-        axiosDeleteMenu({foodcode})
-        .then((response)=>{
+    const onMenuDelete = async (foodcode) => {        //메뉴 삭제 버튼 HOOK 사용
+        try{
+            await axiosDeleteMenu({foodcode});
             alert("메뉴가 삭제되었습니다!");
-        })
+        }catch(e){
+            console.log(e);
+        }
+        
     }
 
 
