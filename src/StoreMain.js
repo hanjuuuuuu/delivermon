@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Table, Button } from 'antd';
+import { Space, Table, Button, Result } from 'antd';
 import axios from 'axios';
 import StoreMenu from './StoreMenu';
 import OrderDelivery from "./OrderDelivery";
 import useAxios from './Hook/useAxios';
 import Modal from 'react-modal';
-import { formatCountdown } from 'antd/es/statistic/utils';
 
 
 //가게 메인 페이지. 가게등록하고 가게들 보이게 한다. 가게 클릭하면 메뉴 테이블의 음식명, 가격이 나타나야하고 메뉴등록 버튼 누르면 메뉴를 추가할 수 있게 한다.
@@ -21,7 +20,7 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
      * 사용자 HOOK
      */
     const axiosDeleteMenu = useAxios('/menudelete')
-    //const axiosInsertMenu = useAxios('/menuinsert')
+    const axiosPrintMenu = useAxios('/callmenu')
 
     
     /**
@@ -44,8 +43,8 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
     }
 
     const onMenuPrint = () => {         //메뉴 테이블에 있는 메뉴 중 가게와 맞는 메뉴 출력
-        return axios
-        .post("/callmenu")
+        axios.post("http://localhost:8080/callmenu",
+            {storecode: storecode})
         .then((res)=>{
             console.log(res.data);
             setMenuInfo(res.data);
@@ -54,6 +53,15 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
             console.log(err.res);
         });
     }
+
+    // const onMenuPrint = async () => {
+    //     try{
+    //         await axiosPrintMenu({storecode});
+    //         setMenuInfo(useAxios.result);
+    //     }catch(e){
+    //         console.log(e);
+    //     }
+    // }
 
     const onMenuChange = (foodcode) => {            //메뉴 수정 버튼
         // return (<Modal isOpen={true}> 메뉴 수정</Modal>)
@@ -78,7 +86,6 @@ const StoreMain = ({offSignIn, storecode, storename}) => {
     //     .then((response) => {
     //         alert("메뉴가 삭제되었습니다!");
     //         console.log(response.data);
-    //         // window.location = '/'
     //     })
     //     .catch((error) => {
     //         console.log(error);

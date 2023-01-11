@@ -1,9 +1,14 @@
 import { Form, InputNumber, Button, Input } from 'antd';
-import axios from 'axios';
-import React, {useEffect} from 'react';
+import React from 'react';
+import useAxios from './Hook/useAxios';
 
 //가게 메뉴 등록 페이지.
 const StoreMenu = ({offMenuUpdate, storecode}) => {
+    /**
+     * 사용자 HOOK
+     */
+    const axiosInsertMenu = useAxios('/menuinsert')
+
     const [form] = Form.useForm();
     const menuTemplete = {
         "storecode": "",
@@ -11,32 +16,26 @@ const StoreMenu = ({offMenuUpdate, storecode}) => {
         "price" : ""
     }
 
-    const onClick = () => {         //등록버튼 눌렀을 때 메뉴 테이블에 메뉴명, 가격 insert 
+    /**
+     * 화면에서 사용하는 이벤트를 정의
+     */
+    const onClick = async () => {       //등록버튼 눌렀을 때 메뉴 테이블에 메뉴명, 가격 insert 
         let storeinform = form.getFieldsValue();
         menuTemplete.storecode = storecode;
         menuTemplete.foodname = storeinform.foodname;
         menuTemplete.price = storeinform.price; 
-
-        axios.post("http://localhost:8080/menuinsert",
-            menuTemplete
-        )
-        .then((response) => {
+        
+        try{
+            await axiosInsertMenu({menuTemplete});
             alert("메뉴가 등록되었습니다!");
-            console.log(response.data);
-            // window.location = '/'
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+        }catch(e){
+            console.log(e);
+        }
     }
 
     const menuCancel = () => {
         offMenuUpdate();
     }
-
-    useEffect(() => {          
-        console.log("storecode", storecode)
-    }, [])
 
     return(
         <Form 

@@ -7,12 +7,18 @@ import StoreMain from './StoreMain';
 import RiderMain from './RiderMain';
 
 const App = () => {
+    /**
+     * 페이지에서 사용하는 상태변수
+     */
     const [isSignIn, setIsSignIn] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [categoryname, setCategoryname] = useState("");
     const [storecode, setStoreCode] = useState("");
     const [storename, setStoreName] = useState("");
 
+    /**
+     * 화면에서 사용하는 이벤트를 정의
+     */
     const onSignUp = () => {        //회원가입
         setIsSignUp(true);
     }
