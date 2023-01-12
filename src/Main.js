@@ -27,7 +27,6 @@ const Main = ({offSignIn}) => {
         setUserMenu(true);
         setStoreCode(storecode);
         setStoreName(storename);
-        console.log(storecode);
     }
 
     const onStorePrint = () => {        //가게 정보 출력
