@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import { Table, Button, Checkbox, Alert } from 'antd';
+import { Table, Checkbox } from 'antd';
 import useAxios from './Hook/useAxios';
 import ShoppingBasket from './ShoppingBasket';
 
@@ -17,14 +17,15 @@ const UserMenu = ({storename, storecode}) => {
      */
     const axiosCallMenu = useAxios('/callmenu');
 
-    var basket = [];    
+    var basket = []; 
+    
     const columns = [
         {
             title: '메뉴',
             dataIndex: 'FOOD_NAME',
             key: 'name',
             render: (text, record, index) => {
-                return <Checkbox onChange={(e)=>GotoBasket(JSON.stringify(record), e.target.checked)} >{text}</Checkbox>                
+                return <Checkbox onChange={(e)=>GotoBasket(record.FOOD_NAME, record.PRICE, e.target.checked)} >{text}</Checkbox>                
             },
         },
         {
@@ -47,35 +48,24 @@ const UserMenu = ({storename, storecode}) => {
         });
     }
 
-    const GotoBasket = (food, checked) => {      //선택한 메뉴를 장바구니에 넣는다.
-        if(checked === true){
-            if(basket.includes(food) === false)     //장바구니에 메뉴가 없을 경우, 장바구니에 넣기
-                basket.push(food);
+    const GotoBasket = (food, price, checked) => {      //선택한 메뉴를 장바구니에 넣고, 선택 취소하면 장바구니에서 뺀다.
+        console.log(food, price, checked)
+
+        if(checked === true){       
+            basket.push({storename,food,price});          //장바구니에 메뉴가 없을 경우, 장바구니에 넣기
             console.log(basket);
         }
         else{
-            if(basket.includes(food) === true){     //장바구니에 메뉴가 있을 경우, 장바구니에서 삭제
-                for(let i=0; i<basket.length; i++){
-                    if(basket[i] === food){
-                        basket.splice(i, 1);
-                        i--;
-                    }
-                }
+            for(let i=0; i<basket.length; i++){     //장바구니에 메뉴가 있을 경우, 장바구니에서 삭제
+                if(basket[i].food === food)
+                basket = basket.filter(param => param.food !== food);
             }
             console.log(basket);
         }
     }
 
     const GotoOrder = () => {
-        // var newbasket = basket.map(function(obj){
-        //     var namebasket = {};
-        //     namebasket[obj.name] = obj.name;
-        //     namebasket[obj.price] = obj.price;
-        //     return newbasket;
-        // });
-        // console.log(newbasket)
-        const newbasket = {storename: storename, basket }
-        sessionStorage.setItem("장바구니", JSON.stringify(newbasket));
+        sessionStorage.setItem("장바구니", JSON.stringify(basket));
         alert("장바구니에 담았습니다.");
     }
 
@@ -89,7 +79,7 @@ const UserMenu = ({storename, storecode}) => {
 
 
     return(
-        onBasket? <ShoppingBasket /> :
+        onBasket? <ShoppingBasket basket={basket}/> :
         <div>
             <div>
                 <h2>{storename}</h2>
@@ -98,7 +88,7 @@ const UserMenu = ({storename, storecode}) => {
                 <button onClick={GotoOrder}> 장바구니에 추가 </button>
             </div>
             <div>
-                <button onClick={GoBasketPage}> 장바구니 </button>
+                <button onClick={GoBasketPage} > 장바구니 </button>
             </div>
             <div>
                 <button > 주문하기 </button>
