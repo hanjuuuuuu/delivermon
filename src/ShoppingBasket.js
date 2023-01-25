@@ -1,12 +1,20 @@
 import {useEffect, useState} from 'react';
-import { Table, Button, Alert} from 'antd';
+import { Table, Button, Space} from 'antd';
+import UserMenu from './UserMenu';
+import useAxios from './Hook/useAxios';
 
 const ShoppingBasket = () => {
+    /**
+     * 사용자 HOOK
+     */
+    const axiosDeleteMenu = useAxios('/menudelete')
+
     /**
      * 페이지에서 사용하는 상태변수
      */
     const [basketdata, setBasketData] = useState([]);
     const [sum, setSum] = useState(0);
+    const [onUserMenu, setOnUserMenu] = useState(false);
 
     const columns = [
         {
@@ -25,7 +33,27 @@ const ShoppingBasket = () => {
             dataIndex: 'price',
             key: 'price',
         },
+        {
+            title: '옵션',
+            key: 'action',
+            render: (text, record, index) => (
+                <Space size="middle">
+                    <Button record={record} onClick={() => alert((record.food))} >삭제</Button> 
+                </Space>
+            ),
+        },
     ]
+
+    const onBasketDelete = async (code) => {        
+        try{
+            await axiosDeleteMenu({code});
+            alert("메뉴가 삭제되었습니다!");
+        }catch(e){
+            console.log(e);
+        }
+        
+    }
+
     const getBasket = () => {
         let basketdataTmp = JSON.parse(sessionStorage.getItem("장바구니"));
 
@@ -50,15 +78,23 @@ const ShoppingBasket = () => {
         setSum(hap);
     }
 
+    const GotoUserMenu = () => {            //가게의 메뉴페이지로 이동(이전 페이지)
+        setOnUserMenu(true);
+    }
+
     useEffect (()=>{
         getBasket();
     }, []);
 
 
     return(
+        onUserMenu? <UserMenu /> :
         <div>
             <div>
                 <h2>장바구니</h2>
+            </div>
+            <div>
+                <button onClick={GotoUserMenu}> 이전 페이지 </button>
             </div>
             <div>
                 <Table columns={columns} dataSource={basketdata} />

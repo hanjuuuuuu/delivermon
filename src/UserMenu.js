@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Table, Checkbox } from 'antd';
 import useAxios from './Hook/useAxios';
 import ShoppingBasket from './ShoppingBasket';
+import Main from './Main';
 
 //고객이 가게를 선택하면 보이는 가게의 메뉴페이지. 메뉴를 선택하고 주문할 수 있다.
 const UserMenu = ({storename, storecode}) => {
@@ -11,6 +12,7 @@ const UserMenu = ({storename, storecode}) => {
      */
     const [storeMenuInfo, setStoreMenuInfo] = useState([]);
     const [onBasket, setOnBasket] = useState(false);
+    const [onMain, setOnMain] = useState(false);
 
     /**
      * 사용자 HOOK
@@ -49,11 +51,12 @@ const UserMenu = ({storename, storecode}) => {
     }
 
     const GotoBasket = (food, price, checked) => {      //선택한 메뉴를 장바구니에 넣고, 선택 취소하면 장바구니에서 뺀다.
-        console.log(food, price, checked)
-
+        let basketdataTmp = JSON.parse(sessionStorage.getItem("장바구니"));
+        console.log('basketdataTmp', basketdataTmp);
+        basket.push.apply(basket, basketdataTmp);
         if(checked === true){       
             basket.push({storename,food,price});          //장바구니에 메뉴가 없을 경우, 장바구니에 넣기
-            console.log(basket);
+            console.log('basket', basket);
         }
         else{
             for(let i=0; i<basket.length; i++){     //장바구니에 메뉴가 있을 경우, 장바구니에서 삭제
@@ -73,6 +76,10 @@ const UserMenu = ({storename, storecode}) => {
         setOnBasket(true);
     }
 
+    const GotoMain = () => {            //메인 페이지로 이동(이전 페이지)
+        setOnMain(true);
+    }
+
     useEffect (()=>{
         GotoMenu();
     }, []);
@@ -80,6 +87,7 @@ const UserMenu = ({storename, storecode}) => {
 
     return(
         onBasket? <ShoppingBasket basket={basket}/> :
+        onMain? <Main/ > :
         <div>
             <div>
                 <h2>{storename}</h2>
@@ -93,6 +101,10 @@ const UserMenu = ({storename, storecode}) => {
             <div>
                 <button > 주문하기 </button>
             </div>
+            <div>
+                <button onClick={GotoMain}> 이전 페이지 </button>
+            </div>
+            <br></br>
             <div>
                 <Table columns={columns} dataSource={storeMenuInfo} />;
             </div>
