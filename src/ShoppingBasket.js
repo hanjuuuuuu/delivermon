@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import { Table, Button, Space} from 'antd';
 import UserMenu from './UserMenu';
 import useAxios from './Hook/useAxios';
+import Order from './Order';
 
 const ShoppingBasket = () => {
     /**
@@ -15,6 +16,7 @@ const ShoppingBasket = () => {
     const [basketdata, setBasketData] = useState([]);
     const [sum, setSum] = useState(0);
     const [onUserMenu, setOnUserMenu] = useState(false);
+    const [onOrder, setOnOrder] = useState(false);
 
     const columns = [
         {
@@ -38,21 +40,11 @@ const ShoppingBasket = () => {
             key: 'action',
             render: (text, record, index) => (
                 <Space size="middle">
-                    <Button record={record} onClick={() => alert((record.food))} >삭제</Button> 
+                    <Button record={record} onClick={() => onBasketDelete(record.key)} >삭제</Button> 
                 </Space>
             ),
         },
     ]
-
-    const onBasketDelete = async (code) => {        
-        try{
-            await axiosDeleteMenu({code});
-            alert("메뉴가 삭제되었습니다!");
-        }catch(e){
-            console.log(e);
-        }
-        
-    }
 
     const getBasket = () => {
         let basketdataTmp = JSON.parse(sessionStorage.getItem("장바구니"));
@@ -82,6 +74,39 @@ const ShoppingBasket = () => {
         setOnUserMenu(true);
     }
 
+    const onBasketDelete = (key) => {         //삭제 다시
+        let newBasket = JSON.parse(sessionStorage.getItem("장바구니"));
+        //키값 추가
+        let i = 0;
+        newBasket = newBasket.map(
+            (row) => {
+                i++;
+                row['key'] = i;
+                return row;
+            }
+        )
+        newBasket = newBasket.filter(param => param.key !== key);
+        sessionStorage.setItem("장바구니", JSON.stringify(newBasket));
+        setBasketData(newBasket);
+
+        //합계 계산
+        var hap = 0;
+        for(let i=0; i<newBasket.length; i++){
+            hap += Number(newBasket[i].price);
+        }
+        setSum(hap);
+    }
+    
+    const onAllBasketDelete = () => {       //장바구니 전체 삭제
+        let basketRefresh = sessionStorage.removeItem("장바구니");
+        setBasketData(basketRefresh);
+        setSum(0);
+    }
+
+    const onOrderPage = () => {     //주문 페이지로 이동
+        setOnOrder(true);
+    }
+
     useEffect (()=>{
         getBasket();
     }, []);
@@ -89,6 +114,7 @@ const ShoppingBasket = () => {
 
     return(
         onUserMenu? <UserMenu /> :
+        onOrder? <Order /> :
         <div>
             <div>
                 <h2>장바구니</h2>
@@ -96,6 +122,11 @@ const ShoppingBasket = () => {
             <div>
                 <button onClick={GotoUserMenu}> 이전 페이지 </button>
             </div>
+            <br></br>
+            <div>
+                <button onClick={onAllBasketDelete}> 전체 삭제 </button>
+            </div>
+            <br></br>
             <div>
                 <Table columns={columns} dataSource={basketdata} />
             </div>
@@ -103,7 +134,7 @@ const ShoppingBasket = () => {
                 <h3>합계: {sum}원 </h3>
             </div>
             <div>
-                <button onClick={()=>{}}> 주문하기 </button>
+                <button onClick={onOrderPage}> 주문하기 </button>
             </div>
             
         </div>

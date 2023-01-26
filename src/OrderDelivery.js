@@ -1,7 +1,7 @@
 import { Form, Table, Space } from 'antd';
 import React, {useState} from 'react';
 
-//주문확인 페이지
+//주문확인 페이지 (가게->주문확인)
 const OrderDelivery = () => {
     const [form] = Form.useForm();
     const [menuInfo, setMenuInfo] = useState([]);

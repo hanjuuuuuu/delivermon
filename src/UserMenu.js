@@ -51,9 +51,6 @@ const UserMenu = ({storename, storecode}) => {
     }
 
     const GotoBasket = (food, price, checked) => {      //선택한 메뉴를 장바구니에 넣고, 선택 취소하면 장바구니에서 뺀다.
-        let basketdataTmp = JSON.parse(sessionStorage.getItem("장바구니"));
-        console.log('basketdataTmp', basketdataTmp);
-        basket.push.apply(basket, basketdataTmp);
         if(checked === true){       
             basket.push({storename,food,price});          //장바구니에 메뉴가 없을 경우, 장바구니에 넣기
             console.log('basket', basket);
@@ -68,6 +65,9 @@ const UserMenu = ({storename, storecode}) => {
     }
 
     const GotoOrder = () => {
+        let basketdataTmp = JSON.parse(sessionStorage.getItem("장바구니"));
+        console.log('basketdataTmp', basketdataTmp);
+        basket.push.apply(basket, basketdataTmp);
         sessionStorage.setItem("장바구니", JSON.stringify(basket));
         alert("장바구니에 담았습니다.");
     }
