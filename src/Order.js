@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Table, Collapse, Button, Input } from 'antd';
+import { Table, Collapse, Radio, Input, Form } from 'antd';
 import ShoppingBasket from './ShoppingBasket';
 
 const Order = () => {
@@ -10,8 +10,11 @@ const Order = () => {
     const [onBasket, setOnBasket] = useState(false);
     const [sum, setSum] = useState(0);
 
+    const [form] = Form.useForm();
+
     const { Panel } = Collapse;
     const { TextArea } = Input;
+    
 
     const columns = [
         {
@@ -33,6 +36,13 @@ const Order = () => {
 
     ]
 
+    const userOrderTemplete = {
+        "address": "",
+        "phone": "",
+        "payment" : "",
+        "requests": ""
+    }
+
     const getOrder = () => {
         let basketdata = JSON.parse(sessionStorage.getItem("장바구니"));
         setOrderData(basketdata);
@@ -49,12 +59,21 @@ const Order = () => {
         setOnBasket(true);
     }
 
+    const saveOrder = () => {       //결제하기 버튼 누르면 주문정보 order_delivery 테이블에 저장
+        let userOrder = form.getFieldsValue();
+        userOrderTemplete.address = userOrder.address1 + userOrder.address2;
+        userOrderTemplete.phone = userOrder.phone;
+        userOrderTemplete.payment = userOrder.payment;
+        userOrderTemplete.requests = userOrder.requests;
+
+        console.log(userOrderTemplete)
+    }
+
     useEffect (()=>{
         getOrder();
     }, []);
 
-    return (
-        
+    return (  
         onBasket? <ShoppingBasket /> :
         <div>
             <div>
@@ -71,22 +90,65 @@ const Order = () => {
             </div>
             <Collapse defaultActiveKey={['1','2','3']}>
                 <Panel header="배달 정보" key="1">
-                    <Input placeholder="주소" />
-                    <Input placeholder="상세주소 입력" />
-                    <Input placeholder="휴대전화번호 입력" />
+                    <Form
+                        form={form}
+                        name="basic"
+                        wrapperCol={{span: 16}}
+                        style={{maxWidth: 600}}
+                    >
+                        <Form.Item
+                            label="주소"
+                            name="address"
+                            rules={[
+                                {
+                                required: true,
+                                message: '주소 입력',
+                                },
+                            ]}
+                        >
+                            <Input name="address1" placeholder="주소 입력" />
+                            <br></br>
+                            <Input name="address2" placeholder="상세주소 입력" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="휴대전화번호"
+                            name="phone"
+                            rules={[
+                                {
+                                required: true,
+                                message: '휴대전화번호 입력',
+                                },
+                            ]}
+                        >
+                            <Input placeholder="휴대전화번호 입력" />
+                            </Form.Item>
+                        </Form>
                 </Panel>
+
                 <Panel header="결제수단 선택" key="2">
-                    <Button>현장결제(카드)</Button>
-                    <Button>현장결제(현금)</Button>
-                    <Button>신용카드</Button>
-                    <Button>휴대전화</Button>
+                    <Form>
+                    <Form.Item name="payment">    
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value="a">현장결제(현금)</Radio>
+                            <Radio value="b">현장결제(카드)</Radio>
+                            <Radio value="c">신용카드</Radio>
+                            <Radio value="d">휴대전화</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                    </Form>
                 </Panel>
+
                 <Panel header="요청사항" key="3">
-                    <TextArea rows={4} />
+                    <Form>
+                    <Form.Item name="requests">
+                        <TextArea rows={4} />
+                    </Form.Item>
+                    </Form>
                 </Panel>
             </Collapse>
             <br></br>
-            <button style={{width:100, height:50, marginLeft:700}} onClick={() => {}}> 결제하기 </button>
+            <button style={{width:100, height:50, marginLeft:700}} onClick={saveOrder}> 결제하기 </button>
         </div>
         
     );
